@@ -21,7 +21,7 @@
           		const indicator_title = $('#indicator_title');
             	const indicator_text = $('#indicator_text');
             	const button_text = $('#button-text');
-            	const previous_button = `	<button type="button" class="btn btn-md btn-block prev">
+            	const previous_button = `	<button type="button" class="btn btn-md btn-block prev black-button">
 						                    <b>&ltPREVIOUS</b>
 						                </button>`;
 
@@ -72,7 +72,7 @@
             		   	if(row['description'].includes('(AP)')) ap = ap + row['point'];
             		   	else ip = ip + row['point'];
 					    table_info = table_info + `<tr>
-										                <td class="text-left"> ${row['description']}</td>
+										                <td class="text-center">${row['description']}</td>
 										                <td class="text-center">
 										                    <b>${row['point']}</b>
 										                </td>
@@ -112,9 +112,9 @@
 									    <br>
 
 									    <div class="text-center">
-									    	<h4 class="strong title_answer">
-									        	${ data['common']['title_answer'] }
-									        </h4>
+									    	<h3 class="strong title_answer">
+									        	<em>${ data['common']['title_answer'] }</em>
+									        </h3>
 									    </div>
 
 									    <br>

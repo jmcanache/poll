@@ -20,7 +20,7 @@
 
     <div id="indicator_body"></div>
 
-    <button type="button" class="btn btn-md  btn-block center next" id="2">
+    <button type="button" class="btn btn-md  btn-block center next black-button" id="2">
         <b id="button-text">NEXT</b>
     </button>
 

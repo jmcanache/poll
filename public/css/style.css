@@ -25,20 +25,15 @@ body {
 }
 
 .next {
-  color: dimgray;
-  width: 150px;
-  border-radius: 0;
+  width: 140px;
   margin: auto;
-  border: 1px solid dimgray;
 }
 .next b{
   font-size: 20px;
 }
 .prev {
-  color: dimgray;
-  width: 120px;
+  width: 220px;
   border-radius: 0;
-  border: 1px solid dimgray;
 }
 .help {
   color: black;
@@ -86,4 +81,16 @@ textarea {
 }
 .popover-content{
   width: 235px;
+}
+
+.black-button {
+  font-size: 30px;
+  color: white;
+  border-radius: 0;
+  background-color: black;
+  border: 2px solid black;
+}
+.black-button:hover {
+  background-color: white;
+  color: black;
 }
