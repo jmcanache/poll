@@ -84,3 +84,6 @@ textarea {
 .radios{
   cursor: pointer;
 }
+.popover-content{
+  width: 235px;
+}

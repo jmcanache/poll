@@ -24,6 +24,8 @@
         <b id="button-text">NEXT</b>
     </button>
 
+    <br>
+    
     <div id="previous"></div>
     
     <br>
