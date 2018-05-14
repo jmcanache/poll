@@ -143,7 +143,7 @@
 									    <br>
 
 									    <h4> ${ data['common']['title_textbox'] } </h4>
-									    <textarea name="why" class="why" cols="30" rows="10">${why_val}</textarea>
+									    <textarea name="why" class="why" cols="30" rows="10" disabled="disabled">${why_val}</textarea>
 
 									    <br>
 									    <br>
