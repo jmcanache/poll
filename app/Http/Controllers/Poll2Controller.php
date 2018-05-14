@@ -15,7 +15,7 @@ use Log;
 class Poll2Controller extends Controller
 {
     public function index(){
-    	$poll = Custom_poll::getPollByName('second');
+    	$poll = Custom_poll::where('name', 'second')->first();
     	$first_indicator = $poll->indicators->where('position', 1)->first();
 
     	$data_indicator = $first_indicator->data_indicators->first();
@@ -24,7 +24,7 @@ class Poll2Controller extends Controller
     }
 
     public function getNextPageInfo($next_position, $current_poll){
-    	$poll = Custom_poll::getPollByName($current_poll);
+    	$poll =Custom_poll::where('name', 'second')->first();
     	$indicator = $poll->indicators->where('position', (int)$next_position)->first();
     	$data_indicator = $indicator->data_indicators->first();
 
