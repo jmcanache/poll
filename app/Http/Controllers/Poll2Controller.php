@@ -10,6 +10,7 @@ use App\Indicator;
 use App\Data_indicator;
 use App\Common;
 use App\Table_indicator;
+use Mail;
 use Log;
 
 class Poll2Controller extends Controller
@@ -42,5 +43,18 @@ class Poll2Controller extends Controller
     	}
 
     	return response()->json(array('current_poll' => $current_poll, 'indicator' => $indicator, 'data_indicator' => $data_indicator, 'common' => $common_data, 'table_data' => $table_data, 'all_indicators' => $all_indicators ));
+    }
+
+    public function send_mail(Request $request){
+    	$db_indicators = Indicator::where('state_poll', 1)->pluck('name', 'position');
+        try{
+	        Mail::send('emails.email_poll2', ['answers' => json_decode($request['answers']), 'explains' => json_decode($request['explains']), 'indicators' => json_decode($request['indicators']), 'db_indicators' => $db_indicators], function ($m) {
+	            $m->from('bam-noreply@bestarchitecturemasters.com', 'BAM');
+	            $m->to('canache39@gmail.com', 'jose')->subject('BAM FORM #2');
+	        });
+	    }catch(\Exception $e){
+		    return response()->json(array('send' => 0));
+		}
+		return response()->json(array('send' => 1));
     }
 }

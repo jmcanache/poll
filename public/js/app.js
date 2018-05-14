@@ -9,7 +9,6 @@
 
  	function ajaxCall(self, next_position, current_poll){
  		const current_position = next_position - 1;
-
  		$.ajax({
             type: "GET",
             url: '/getNextPageInfo/'+ next_position + '/' + current_poll,
@@ -143,7 +142,7 @@
 									    <br>
 
 									    <h4> ${ data['common']['title_textbox'] } </h4>
-									    <textarea name="why" class="why" cols="30" rows="10" disabled="disabled">${why_val}</textarea>
+									    <textarea name="why" class="why" cols="30" rows="10" disabled="disabled" placeholder="Type here...">${why_val}</textarea>
 
 									    <br>
 									    <br>
@@ -178,6 +177,16 @@
 
 				    $('#indicator_body').html(indicator_body);
             	}else if(data['indicator']['position'] == 17){
+            		let current_indi = "";
+            		$.each(new_indicators, function(indi, why){
+            			current_indi = current_indi + ` <div class="row_indicator"><hr /><div class="row added_indi">
+								 							<div class="col-sm-5 indi">${indi}</div>
+								 							<div class="col-sm-6">${why}</div>
+								 							<div class="col-sm-1 remove_indicator"><span>x</span></div>
+								 						</div></div>`;
+            		});
+ 					$('#indicator_text').append(current_indi);
+
             		let indicator_body = `<div class="row add_indicator">
             								<div class="col-sm-5"><input type="text" placeholder="Indicator..." id="indi_add"></div>
             								<div class="col-sm-7"><input type="text" placeholder="Why?" id="why_add"></div>
@@ -197,6 +206,33 @@
  		let next_position = $('.next').attr('id');
  		let current_poll = $('.current_poll').attr('id');
 
+ 		if(next_position == 19) {
+ 			$('.next').prop('disabled', true);
+ 			mail_data = {'answers': JSON.stringify(answers), 'explains': JSON.stringify(explains), 'indicators': JSON.stringify(new_indicators)};
+ 			$.ajax({
+ 				headers: {
+		            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		        },
+ 				url: '/send_mail',
+				type: 'POST',
+				dataType: 'json',
+				data: mail_data,
+	            success: (data) => {
+	            	if(data['send'] == 1 ){
+	            		answers = {};
+	            		explains = {};
+	            		new_indicators = {};
+	            		$('#previous, .next, #indicator_text, #indicator_title, .help').addClass('hidden');
+	            		$('#poll_description').removeClass('hidden');
+	            		$('#indicator_body').html('<br><br><div class="text-center"><h1><strong>Thanks for your help!</strong></h1></div>');
+	            	}else{
+	            		alert("Something wrong happened! Please try again.")
+	            		$('.next').prop('disabled', false);
+	            	}
+	            }
+        	})
+ 			return;
+ 		}
  		//hide popover of help
  		$('[data-toggle="popover"]').popover('hide');
 
