@@ -49,6 +49,7 @@
             	//Hide Description if necessary and set new id for search values in database
             	next_position < 2 ? $('#poll_description').removeClass('hidden') : $('#poll_description').addClass('hidden');
             	$('.next').attr('id', data['indicator']['position'] + 1);
+            	$('#btn_edit, #btn_save').attr('indicator', data['indicator']['position']);
             	$('.next, .previous').blur();
 
             	//Set Button name depending on Indicator position
@@ -69,28 +70,28 @@
             		let ap = 0;
 
             		$.each(data['table_data'], (index, row) => {
-            		   	if(row['description'].includes('(AP)')) ap = ap + row['point'];
-            		   	else ip = ip + row['point'];
-					    table_info = table_info + `<tr>
-										                <td class="text-center">${row['description']}</td>
+            		   	ip = data['indicator']['indi_points'];
+            		   	ap = data['indicator']['add_points'];
+					    table_info = table_info + `<tr class="row_table">
+										                <td class="text-center table_description">${row['description']}</td>
 										                <td class="text-center">
-										                    <b>${row['point']}</b>
+										                    <b class="table_point">${row['point']}</b>
 										                </td>
 										            </tr>`;
 					});
 
 
             		let indicator_body = `<b>
-									        ${ data['common']['title_table'] }:
+									        <span id="edit_table">${ data['common']['title_table'] }</span>:
 									    </b>
 									    <table class="table table-striped">
 									        <thead>
 									            <tr>
 									                <th class="text-center">
-									                    <b>${ data['common']['th_1'] }</b>
+									                    <b id="th_1">${ data['common']['th_1'] }</b>
 									                </th>
 									                <th class="text-center">
-									                    <b>${ data['common']['th_2'] }</b>
+									                    <b id="th_2">${ data['common']['th_2'] }</b>
 									                </th>
 									            </tr>
 									        </thead>
@@ -102,18 +103,18 @@
 									    <br>
 
 									    <div class="condensed">
-									        <b> ${ data['common']['tf'] }: </b>
-									        <p> ${ data['common']['stf_1'] }: ${ip} </p>
-									        <p> ${ data['common']['stf_2'] }: ${ap}</p>
-									        <b> ${ data['common']['tp'] }: ${ip + ap} </b>
+									        <b><span id="tf"> ${ data['common']['tf'] }</span>: </b>
+									        <p><span id="stf_1">${ data['common']['stf_1'] }</span>: <span id="indi_point">${ip}</span> </p>
+									        <p><span id="stf_2">${ data['common']['stf_2'] }</span>: <span id="add_point">${ap}</span></p>
+									        <b><span id="tp">${ data['common']['tp'] }</span>: ${ip + ap} </b>
 									    </div>
 
 									    <br>
 									    <br>
 
 									    <div class="text-center">
-									    	<h3 class="strong title_answer">
-									        	<em>${ data['common']['title_answer'] }</em>
+									    	<h3 class="strong title_answer" id="title_answer">
+									        	${ data['common']['title_answer'] }
 									        </h3>
 									    </div>
 
@@ -141,8 +142,8 @@
 									    <br>
 									    <br>
 
-									    <h4> ${ data['common']['title_textbox'] } </h4>
-									    <textarea name="why" class="why" cols="30" rows="10" disabled="disabled" placeholder="Type here...">${why_val}</textarea>
+									    <h4 id="title_textbox"> ${ data['common']['title_textbox'] } </h4>
+									    <textarea name="why" class="why" cols="30" rows="10" placeholder="Type here...">${why_val}</textarea>
 
 									    <br>
 									    <br>
@@ -157,7 +158,7 @@
 						name = row['name'].replace(remove_minus, '');
 					    table_info = table_info + `<tr>
 										                <td class="text-left">
-										                    <b>${name}</b>
+										                    <b class="indicator_name">${name}</b>
 										                </td>
 										            </tr>`;
 					});
@@ -277,8 +278,76 @@
  		ajaxCall('.prev', next_position, current_poll);
  	});
 
- 	$('body').on('click', '.radios', function() {
- 		let disabled = $('input[name=study]:checked', '.qualify').val();
- 		disabled == "1" ? $('.why').attr('disabled', 'disabled') : $('.why').removeAttr('disabled');
- 	});
+ 	$('#btn_edit').click(function(){
+ 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point').attr('contenteditable', 'true').addClass('red');
+ 		$('.next, .prev, #btn_edit').prop('disabled', true);
+ 		$('#btn_cancel').prop('disabled', false);
+ 	})
+
+ 	$('#btn_save').click(function(){
+ 		let custom_polls = {
+ 			'name': $('.current_poll').attr('id'),
+ 			'description': $('#poll_description').html()
+ 		};
+
+ 		let common = {
+ 			'title_table': $('#edit_table').html(),
+ 			'th_1': $('#th_1').html(),
+ 			'th_2': $('#th_2').html(),
+ 			'tf': $('#tf').html(),
+ 			'stf_1': $('#stf_1').html(),
+ 			'stf_2': $('#stf_2').html(),
+ 			'tp': $('#tp').html(),
+ 			'title_answer': $('#title_answer').html(),
+ 			'title_textbox': $('#title_textbox').html(),
+ 		};
+ 		let indicator = {
+ 			'position': $(this).attr('indicator'),
+ 			'indicator_title': $('#indicator_title').html(),
+ 			'indi_points': $('#indi_point').html(),
+ 			'add_points': $('#add_point').html(),
+ 		};
+ 		let data_indicator = {
+ 			'main_text': $('#indicator_text').html()
+ 		};
+ 		
+ 		let table_indicators = {};
+
+ 		$('.row_table').each(function(index, elem){
+ 			let point = $(this).find('.table_point').html();
+ 			let description = $(this).find('.table_description').html();
+ 			table_indicators[index] = [point, description]; 	
+ 		});
+ 		
+		let data = {
+			'custom_polls': custom_polls,
+			'common': common,
+			'indicator': indicator,
+			'data_indicator': data_indicator,
+			'table_indicators': table_indicators,
+		}
+
+		console.log(data_indicator);
+
+		$.ajax({
+			headers: {
+	            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        },
+			url: '/edit_data',
+			type: 'POST',
+			dataType: 'json',
+			data: data,
+	        success: (data) => {
+	        	console.log(data);
+	        }
+		})
+
+ 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point').attr('contenteditable', 'false').removeClass('red');
+ 		$('.next, .prev, #btn_edit').prop('disabled', false);
+ 		$('.next, .prev, #btn_cancel').prop('disabled', true);
+ 	})
+
+ 	$('#btn_cancel').click(function(){
+        location.reload();
+    });
  })

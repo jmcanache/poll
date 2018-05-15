@@ -11,5 +11,7 @@
 */
 
 Route::get('/', 'Poll2Controller@index');
+Route::get('index_edit', ['as' => 'index_edit', 'uses' => 'Poll2Controller@index_edit']);
 Route::post('send_mail', ['as' => 'send_mail', 'uses' =>'Poll2Controller@send_mail']);
+Route::post('edit_data', ['as' => 'edit_data', 'uses' =>'Poll2Controller@edit_data']);
 Route::get('getNextPageInfo/{next_position}/{current_poll}', ['as' => 'getNextPageInfo', 'uses' => 'Poll2Controller@getNextPageInfo']);

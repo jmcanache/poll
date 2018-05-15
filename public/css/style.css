@@ -84,7 +84,7 @@ textarea {
 }
 
 .black-button {
-  font-size: 30px;
+  font-size: 26px;
   color: white;
   border-radius: 0;
   background-color: black;
@@ -93,4 +93,7 @@ textarea {
 .black-button:hover {
   background-color: white;
   color: black;
+}
+.red{
+  color: red;
 }
