@@ -208,7 +208,7 @@
  		let current_poll = $('.current_poll').attr('id');
 
  		if(next_position == 19) {
- 			$('.next').prop('disabled', true);
+ 			$('.next, .prev').prop('disabled', true);
  			mail_data = {'answers': JSON.stringify(answers), 'explains': JSON.stringify(explains), 'indicators': JSON.stringify(new_indicators)};
  			$.ajax({
  				headers: {
@@ -228,7 +228,7 @@
 	            		$('#indicator_body').html('<br><br><div class="text-center"><h1><strong>Thanks for your help!</strong></h1></div>');
 	            	}else{
 	            		alert("Something wrong happened! Please try again.")
-	            		$('.next').prop('disabled', false);
+	            		$('.next, .prev').prop('disabled', false);
 	            	}
 	            }
         	})
@@ -266,7 +266,6 @@
 
  	$('body').on('click', '.remove_indicator', function() {
  		$(this).closest('.row_indicator').find('hr').remove();
- 		console.log($(this).closest('.row_indicator').find('.indi').text())
  		delete new_indicators[$(this).closest('.row_indicator').find('.indi').html()];
  		$(this).closest('.row_indicator').remove();
  	});
@@ -279,12 +278,15 @@
  	});
 
  	$('#btn_edit').click(function(){
- 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point').attr('contenteditable', 'true').addClass('red');
+ 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .help_text').attr('contenteditable', 'true').addClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', true);
+ 		$('.help_text').removeClass('hidden');
  		$('#btn_cancel').prop('disabled', false);
  	})
 
  	$('#btn_save').click(function(){
+ 		$('.help_text').addClass('hidden');
+ 		$('.help').attr('data-content', $('.help_text_area').val());
  		let custom_polls = {
  			'name': $('.current_poll').attr('id'),
  			'description': $('#poll_description').html()
@@ -300,7 +302,9 @@
  			'tp': $('#tp').html(),
  			'title_answer': $('#title_answer').html(),
  			'title_textbox': $('#title_textbox').html(),
+ 			'help_text': $('.help_text_area').val(),
  		};
+
  		let indicator = {
  			'position': $(this).attr('indicator'),
  			'indicator_title': $('#indicator_title').html(),
@@ -326,8 +330,6 @@
 			'data_indicator': data_indicator,
 			'table_indicators': table_indicators,
 		}
-
-		console.log(data_indicator);
 
 		$.ajax({
 			headers: {

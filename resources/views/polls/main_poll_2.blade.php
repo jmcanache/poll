@@ -40,7 +40,15 @@
     
     <br>
 
-    <button type="button" class="btn btn-block help" data-toggle="popover" data-content="If you need some help from us, please contact  info@bestarchitecturemasters.com">
+    <button type="button" class="btn btn-block help" data-toggle="popover" data-content="{{ $help_text }} ">
         <b>HELP!</b>
     </button>
+    @if($edit_active) 
+        <div class="help_text hidden">
+            <br>
+            <h4>Type in the next box to edit the information of the help button.</h4>
+            <textarea class="help_text_area" cols="10" rows="2" placeholder="Type here...">{{ $help_text }}</textarea>
+            <br>
+        </div>
+    @endif
 @stop

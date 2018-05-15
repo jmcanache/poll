@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
        	//$this->call(TableIndicatorTableSeeder::class);
         //$this->call(CustomPollsDescritionSeeder::class);
         //$this->call(IndicatorTablePointsSeeder::class);
+        $this->call(CommonTableAddHelpTextSeeder::class);
     }
 }

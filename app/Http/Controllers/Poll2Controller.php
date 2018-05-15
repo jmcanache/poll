@@ -18,19 +18,19 @@ class Poll2Controller extends Controller
     public function index(){
     	$poll = Custom_poll::getPollByName('second');
     	$first_indicator = $poll->indicators->where('position', 1)->first();
-
     	$data_indicator = $first_indicator->data_indicators->first();
+    	$help_text = Common::where('custom_poll_id', $poll->id)->pluck('help_text')->first();
 
-    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => false]);
+    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => false, 'help_text' => $help_text]);
     }
 
     public function index_edit(){
     	$poll = Custom_poll::getPollByName('second');
     	$first_indicator = $poll->indicators->where('position', 1)->first();
-
     	$data_indicator = $first_indicator->data_indicators->first();
+		$help_text = Common::where('custom_poll_id', $poll->id)->pluck('help_text')->first();
 
-    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => true]);
+    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => true, 'help_text' => $help_text]);
     }
 
     public function getNextPageInfo($next_position, $current_poll){
@@ -59,7 +59,7 @@ class Poll2Controller extends Controller
         try{
 	        Mail::send('emails.email_poll2', ['answers' => json_decode($request['answers']), 'explains' => json_decode($request['explains']), 'indicators' => json_decode($request['indicators']), 'db_indicators' => $db_indicators], function ($m) {
 	            $m->from('bam-noreply@bestarchitecturemasters.com', 'BAM');
-	            $m->to('canache39@gmail.com', 'BAM')->subject('BAM FORM #2');
+	            $m->to('info@bestarchitecturemasters.com', 'BAM')->subject('BAM FORM #2');
 	        });
 	    }catch(\Exception $e){
 		    return response()->json(array('send' => 0));
@@ -68,6 +68,7 @@ class Poll2Controller extends Controller
     }
 
     public function edit_data(Request $request){
+    	Log::debug($request);
     	try{
 	    	$custom_poll = Custom_poll::where(['name' => $request['custom_polls']['name']])->first();
 	    	$indicator = Indicator::where(['position' => $request['indicator']['position']])->first();
@@ -90,7 +91,12 @@ class Poll2Controller extends Controller
 	    		$data_indicator->save();
 	    	}
 
-	    	if(array_has($request, 'common')){
+	    	if(array_has($request['common'], 'help_text')){
+	    		$common->help_text =  trim($request['common']['help_text']);
+	    		$common->save();
+	    	}
+
+	    	if(array_has($request, 'table_indicators')){
 	    		$common->title_table =  trim($request['common']['title_table']);
 	    		$common->th_1 =  trim($request['common']['th_1']);
 	    		$common->th_2 =  trim($request['common']['th_2']);
