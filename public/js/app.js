@@ -338,13 +338,13 @@
 			dataType: 'json',
 			data: data,
 	        success: (data) => {
-	        	console.log(data);
+	        	data['edited'] == 1 ? alert('Successfully changes') : alert('Something wrong happened, try again');
 	        }
 		})
 
  		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point').attr('contenteditable', 'false').removeClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', false);
- 		$('.next, .prev, #btn_cancel').prop('disabled', true);
+ 		$('#btn_cancel').prop('disabled', true);
  	})
 
  	$('#btn_cancel').click(function(){
