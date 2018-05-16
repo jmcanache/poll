@@ -73,8 +73,6 @@ class Poll2Controller extends Controller
 	    	$custom_poll = Custom_poll::where(['name' => $request['custom_polls']['name']])->first();
 	    	$indicator = Indicator::where(['position' => $request['indicator']['position']])->first();
 	    	$data_indicator = Data_indicator::where(['indicator_id' => $indicator->id])->first();
-	    	$common = Common::where(['custom_poll_id' => $custom_poll->id])->first();
-	    	Table_indicator::where(['indicator_id' => $indicator->id])->delete();
 
 	    	if($request['indicator']['position'] == 1){
 	    		$custom_poll->description = trim($request['custom_polls']['description']);
@@ -92,21 +90,12 @@ class Poll2Controller extends Controller
 	    	}
 
 	    	if(array_has($request['common'], 'help_text')){
-	    		$common->help_text =  trim($request['common']['help_text']);
-	    		$common->save();
+	    		Common::update_common_data($custom_poll->id, $request['common']);
 	    	}
 
 	    	if(array_has($request, 'table_indicators')){
-	    		$common->title_table =  trim($request['common']['title_table']);
-	    		$common->th_1 =  trim($request['common']['th_1']);
-	    		$common->th_2 =  trim($request['common']['th_2']);
-	    		$common->tf =  trim($request['common']['tf']);
-	    		$common->stf_1 =  trim($request['common']['stf_1']);
-	    		$common->stf_2 =  trim($request['common']['stf_2']);
-	    		$common->tp =  trim($request['common']['tp']);
-	    		$common->title_answer =  trim($request['common']['title_answer']);
-	    		$common->title_textbox =  trim($request['common']['title_textbox']);
-	    		$common->save();
+	    		Table_indicator::where(['indicator_id' => $indicator->id])->delete();
+	    		Common::update_common_data($custom_poll->id, $request['common']);
 
 	    		$indicator->indi_points = $request['indicator']['indi_points'];
 	    		$indicator->add_points =$request['indicator']['add_points'];
@@ -120,6 +109,16 @@ class Poll2Controller extends Controller
 	    			$table_indicator->save();
 	    		} 
 	    	}
+
+	    	if(array_has($request, 'indicators')){
+	    		foreach ($request['indicators'] as $position => $value) {
+	    			$current_indicator = Indicator::where(['position' => $position])->first();
+	    			$current_indicator->name = $value[0];
+	    			$current_indicator->relevance = $value[1];
+	    			$current_indicator->save();
+	    		}
+	    	}
+
     	}catch(\Exception $e){
 		    return response()->json(array('edited' => 0));
 		}

@@ -32,11 +32,13 @@ body {
   font-size: 20px;
 }
 .prev {
-  width: 220px;
+  color: dimgray;
+  width: 120px;
   border-radius: 0;
+  border: 1px solid dimgray;
 }
 .help {
-  color: black;
+  color: dimgray;
   width: 66px;
   border-radius: 0;
   border: 1px solid dimgray;

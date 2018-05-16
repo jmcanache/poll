@@ -21,7 +21,7 @@
           		const indicator_title = $('#indicator_title');
             	const indicator_text = $('#indicator_text');
             	const button_text = $('#button-text');
-            	const previous_button = `	<button type="button" class="btn btn-md btn-block prev black-button">
+            	const previous_button = `	<button type="button" class="btn btn-md btn-block prev">
 						                    <b>&ltPREVIOUS</b>
 						                </button>`;
 
@@ -156,9 +156,12 @@
             		$.each(data['all_indicators'], (index, row) => {
             			const remove_minus = new RegExp('-', 'g');
 						name = row['name'].replace(remove_minus, '');
-					    table_info = table_info + `<tr>
+					    table_info = table_info + `<tr class="indicator_table" position="${row['position']}">
 										                <td class="text-left">
 										                    <b class="indicator_name">${name}</b>
+										                </td>
+										                <td class="text-center">
+										                    <b class="indicator_relevance">${row['relevance']}</b>
 										                </td>
 										            </tr>`;
 					});
@@ -169,10 +172,20 @@
 				                <th class="text-center">
 				                    <b>INDICATORS</b>
 				                </th>
+				                <th class="text-center">
+				                    <b>% of relevance</b>
+				                </th>
 				            </tr>
 				        </thead>
 				        <tbody>
 				            ${table_info}
+				            <tr>
+				            	<td>
+				                </td>
+				                <td class="text-center">
+				                    <b>100,0</b>
+				                </td>
+				            </tr>
 				        </tbody>
 				    </table>`
 
@@ -207,6 +220,7 @@
  		let next_position = $('.next').attr('id');
  		let current_poll = $('.current_poll').attr('id');
 
+ 		
  		if(next_position == 19) {
  			$('.next, .prev').prop('disabled', true);
  			mail_data = {'answers': JSON.stringify(answers), 'explains': JSON.stringify(explains), 'indicators': JSON.stringify(new_indicators)};
@@ -278,7 +292,7 @@
  	});
 
  	$('#btn_edit').click(function(){
- 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .help_text').attr('contenteditable', 'true').addClass('red');
+ 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .help_text, .indicator_relevance, .indicator_name').attr('contenteditable', 'true').addClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', true);
  		$('.help_text').removeClass('hidden');
  		$('#btn_cancel').prop('disabled', false);
@@ -322,6 +336,15 @@
  			let description = $(this).find('.table_description').html();
  			table_indicators[index] = [point, description]; 	
  		});
+
+ 		let indicator_table = {}
+
+ 		$('.indicator_table').each(function(elem){
+ 			let name = $(this).find('.indicator_name').html();
+ 			let relevance = $(this).find('.indicator_relevance').html();
+ 			let position = $(this).attr('position');
+ 			indicator_table[position] = [name.replace('  ', ' - '), relevance]; 
+ 		})
  		
 		let data = {
 			'custom_polls': custom_polls,
@@ -329,6 +352,7 @@
 			'indicator': indicator,
 			'data_indicator': data_indicator,
 			'table_indicators': table_indicators,
+			'indicators': indicator_table,
 		}
 
 		$.ajax({
@@ -344,7 +368,7 @@
 	        }
 		})
 
- 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point').attr('contenteditable', 'false').removeClass('red');
+ 		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .indicator_relevance, .indicator_name').attr('contenteditable', 'false').removeClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', false);
  		$('#btn_cancel').prop('disabled', true);
  	})
@@ -353,3 +377,11 @@
         location.reload();
     });
  })
+
+ function toNumberString(num) { 
+  if (Number.isInteger(num)) { 
+    return num + ".0"
+  } else {
+    return num.toString(); 
+  }
+}
