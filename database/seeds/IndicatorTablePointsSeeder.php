@@ -15,7 +15,7 @@ class IndicatorTablePointsSeeder extends Seeder
     {
     	$indi = Indicator::where('name', '01 - Consolidation in time')->update(['indi_points' => 3, 'add_points' => 3]);
     	$indi = Indicator::where('name', '02 - Relation with other universities')->update(['indi_points' => 3, 'add_points' => 2]);
-    	$indi = Indicator::where('name', '03 - Study plan: Length vs. Benefit')->update(['indi_points' => 4, 'add_points' => 2]);
+    	$indi = Indicator::where('name', '03 - Study plan: Length vs Benefit')->update(['indi_points' => 4, 'add_points' => 2]);
     	$indi = Indicator::where('name', '04 - Study plan: Teaching system')->update(['indi_points' => 6, 'add_points' => 3]);
     	$indi = Indicator::where('name', '05 - Job opportunities and networking')->update(['indi_points' => 5, 'add_points' => 0]);
     	$indi = Indicator::where('name', '06 - Faculty Internationality')->update(['indi_points' => 5, 'add_points' => 1]);

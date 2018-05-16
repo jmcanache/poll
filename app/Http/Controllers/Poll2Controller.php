@@ -11,6 +11,7 @@ use App\Data_indicator;
 use App\Common;
 use App\Table_indicator;
 use Mail;
+use DB;
 use Log;
 
 class Poll2Controller extends Controller
@@ -78,8 +79,15 @@ class Poll2Controller extends Controller
 
 	    	//Delete old rows from Table_indicator table and add new data
 	    	if(array_has($request, 'table_indicators')){
-	    		Table_indicator::deleteByIndicatorId($indicator->id);
-	    		foreach ($request['table_indicators'] as $row) Table_indicator::insertNewData($indicator->id, $row);
+	    		DB::beginTransaction();
+    			try {
+		    		Table_indicator::deleteByIndicatorId($indicator->id);
+		    		foreach ($request['table_indicators'] as $row) Table_indicator::insertNewData($indicator->id, $row);
+		    		DB::commit();
+	    		} catch (\Exception $e) {
+			        DB::rollBack();
+			        return response()->json(array('edited' => 0));
+			    }
 	    	}
 
 	    	//Update All fields from Indicator table
