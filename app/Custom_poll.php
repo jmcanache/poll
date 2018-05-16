@@ -28,4 +28,10 @@ class Custom_poll extends Model
     public static function getPollByName($name){
         return self::where('name', $name)->first();
     }
+
+    public static function update_description($cp_id, $cp_data){
+        $cp = self::find($cp_id);
+        $cp->description = $cp_data;
+        $cp->save();
+    }
 }

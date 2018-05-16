@@ -295,7 +295,7 @@
  		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .help_text, .indicator_relevance, .indicator_name').attr('contenteditable', 'true').addClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', true);
  		$('.help_text').removeClass('hidden');
- 		$('#btn_cancel').prop('disabled', false);
+ 		$('#btn_cancel, #btn_save').prop('disabled', false);
  	})
 
  	$('#btn_save').click(function(){
@@ -334,7 +334,10 @@
  		$('.row_table').each(function(index, elem){
  			let point = $(this).find('.table_point').html();
  			let description = $(this).find('.table_description').html();
- 			table_indicators[index] = [point, description]; 	
+ 			table_indicators[index] = {
+ 				'point': point, 
+ 				'description': description
+ 			}; 	
  		});
 
  		let indicator_table = {}
@@ -343,7 +346,10 @@
  			let name = $(this).find('.indicator_name').html();
  			let relevance = $(this).find('.indicator_relevance').html();
  			let position = $(this).attr('position');
- 			indicator_table[position] = [name.replace('  ', ' - '), relevance]; 
+ 			indicator_table[position] = {
+ 				'name': name.replace('  ', ' - '), 
+ 				'relevance': relevance
+ 			}; 
  		})
  		
 		let data = {
@@ -370,7 +376,7 @@
 
  		$('#poll_description, #indicator_title, #indicator_text, .table_description, .table_point, #edit_table, #th_1, #th_2, #tf, #stf_1, #stf_2, #tp, #title_answer, #title_textbox, #indi_point, #add_point, .indicator_relevance, .indicator_name').attr('contenteditable', 'false').removeClass('red');
  		$('.next, .prev, #btn_edit').prop('disabled', false);
- 		$('#btn_cancel').prop('disabled', true);
+ 		$('#btn_cancel, #btn_save').prop('disabled', true);
  	})
 
  	$('#btn_cancel').click(function(){

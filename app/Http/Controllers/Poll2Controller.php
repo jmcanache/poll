@@ -16,21 +16,13 @@ use Log;
 class Poll2Controller extends Controller
 {
     public function index(){
-    	$poll = Custom_poll::getPollByName('second');
-    	$first_indicator = $poll->indicators->where('position', 1)->first();
-    	$data_indicator = $first_indicator->data_indicators->first();
-    	$help_text = Common::where('custom_poll_id', $poll->id)->pluck('help_text')->first();
-
-    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => false, 'help_text' => $help_text]);
+    	$send = self::index_Algotirhm();
+    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $send['poll']->description, 'indicator_title' => $send['first_indicator']->name, 'indicator_text' => $send['data_indicator']->main_text, 'edit_active' => false, 'help_text' => $send['help_text']]);
     }
 
     public function index_edit(){
-    	$poll = Custom_poll::getPollByName('second');
-    	$first_indicator = $poll->indicators->where('position', 1)->first();
-    	$data_indicator = $first_indicator->data_indicators->first();
-		$help_text = Common::where('custom_poll_id', $poll->id)->pluck('help_text')->first();
-
-    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $poll->description, 'indicator_title' => $first_indicator->name, 'indicator_text' => $data_indicator->main_text, 'edit_active' => true, 'help_text' => $help_text]);
+    	$send = self::index_Algotirhm();
+    	return view('polls/main_poll_2', ['current_poll' => 'second', 'poll_description' => $send['poll']->description, 'indicator_title' => $send['first_indicator']->name, 'indicator_text' => $send['data_indicator']->main_text, 'edit_active' => true, 'help_text' => $send['help_text']]);
     }
 
     public function getNextPageInfo($next_position, $current_poll){
@@ -68,60 +60,42 @@ class Poll2Controller extends Controller
     }
 
     public function edit_data(Request $request){
-    	Log::debug($request);
     	try{
-	    	$custom_poll = Custom_poll::where(['name' => $request['custom_polls']['name']])->first();
-	    	$indicator = Indicator::where(['position' => $request['indicator']['position']])->first();
-	    	$data_indicator = Data_indicator::where(['indicator_id' => $indicator->id])->first();
+	    	$custom_poll = Custom_poll::getPollByName($request['custom_polls']['name']);
+	    	$indicator = Indicator::getIndicatorByPosition($request['indicator']['position']);
 
-	    	if($request['indicator']['position'] == 1){
-	    		$custom_poll->description = trim($request['custom_polls']['description']);
-	    		$custom_poll->save();
-	    	}
+	    	//Update description field in Custom_poll Table
+	    	if(array_has($request['custom_polls'], 'description')) Custom_poll::update_description($custom_poll->id, trim($request['custom_polls']['description']));
 
-	    	if(array_has($request['indicator'], 'indicator_title')){
-	    		$indicator->name = trim($request['indicator']['indicator_title']);
-	    		$indicator->save();
-	    	}
+	    	//Update Indicator table
+	    	if(array_has($request, 'indicator')) Indicator::update_indicator($custom_poll->id, $request['indicator']['position'], $request['indicator']);
 
-	    	if(array_has($request['data_indicator'], 'main_text')){
-	    		$data_indicator->main_text = trim($request['data_indicator']['main_text']);
-	    		$data_indicator->save();
-	    	}
+	    	//Update Data_indicator table
+	    	if(array_has($request, 'data_indicator')) Data_indicator::update_data_indicator($indicator->id, $request['data_indicator']);
 
-	    	if(array_has($request['common'], 'help_text')){
-	    		Common::update_common_data($custom_poll->id, $request['common']);
-	    	}
+	    	//Update Common table
+	    	if(array_has($request, 'common')) Common::update_common_data($custom_poll->id, $request['common']);
 
+	    	//Delete old rows from Table_indicator table and add new data
 	    	if(array_has($request, 'table_indicators')){
-	    		Table_indicator::where(['indicator_id' => $indicator->id])->delete();
-	    		Common::update_common_data($custom_poll->id, $request['common']);
-
-	    		$indicator->indi_points = $request['indicator']['indi_points'];
-	    		$indicator->add_points =$request['indicator']['add_points'];
-	    		$indicator->save();
-
-	    		foreach ($request['table_indicators'] as $row) {
-	    			$table_indicator = new Table_indicator;
-	    			$table_indicator->indicator_id = $indicator->id;
-	    			$table_indicator->description = trim($row[1]);
-	    			$table_indicator->point = trim($row[0]);
-	    			$table_indicator->save();
-	    		} 
+	    		Table_indicator::deleteByIndicatorId($indicator->id);
+	    		foreach ($request['table_indicators'] as $row) Table_indicator::insertNewData($indicator->id, $row);
 	    	}
 
-	    	if(array_has($request, 'indicators')){
-	    		foreach ($request['indicators'] as $position => $value) {
-	    			$current_indicator = Indicator::where(['position' => $position])->first();
-	    			$current_indicator->name = $value[0];
-	    			$current_indicator->relevance = $value[1];
-	    			$current_indicator->save();
-	    		}
-	    	}
+	    	//Update All fields from Indicator table
+	    	if(array_has($request, 'indicators')) foreach ($request['indicators'] as $position => $value) Indicator::update_indicator($custom_poll->id, $position, $value);
 
     	}catch(\Exception $e){
 		    return response()->json(array('edited' => 0));
 		}
     	return response()->json(array('edited' => 1));
+    }
+
+    public function index_Algotirhm(){
+    	$poll = Custom_poll::getPollByName('second');
+    	$first_indicator = $poll->indicators->where('position', 1)->first();
+    	$data_indicator = $first_indicator->data_indicators->first();
+    	$help_text = Common::where('custom_poll_id', $poll->id)->pluck('help_text')->first();
+    	return ['poll' => $poll, 'first_indicator' => $first_indicator, 'data_indicator' => $data_indicator, 'help_text' => $help_text];
     }
 }

@@ -16,7 +16,7 @@ class IndicatorsTableSeeder extends Seeder
     	$custom_poll_id = Custom_poll::where('name', 'second')->first();
 		$names_indicator = [3  => '01 - Consolidation in time',
 					    	4  => '02 - Relation with other universities',
-					    	5  => '03 - Study plan: Length vs. Benefit',
+					    	5  => '03 - Study plan: Length vs Benefit',
 					    	6  => '04 - Study plan: Teaching system',
 					    	7  => '05 - Job opportunities and networking',
 					    	8  => '06 - Faculty Internationality',

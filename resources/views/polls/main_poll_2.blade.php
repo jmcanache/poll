@@ -5,7 +5,7 @@
         @if($edit_active) 
             <div class="text-right">
                     <button type="button" class="btn btn-warning" id="btn_edit" indicator="1">Edit</button>
-                    <button type="button" class="btn btn-success" id="btn_save" indicator="1">Save</button>
+                    <button type="button" class="btn btn-success" id="btn_save" indicator="1" disabled="true">Save</button>
                     <button type="button" class="btn btn-danger"  id="btn_cancel" indicator="1" disabled="true">Cancel</button>
             </div>
             <br>

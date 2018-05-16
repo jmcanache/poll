@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Table_indicator extends Model
 {
+	protected $fillable = ['indicator_id', 'description', 'point'];
+
 	/*********** Relationships Start **************/
 	
     public function indicator()
@@ -14,4 +16,16 @@ class Table_indicator extends Model
     }
 
     /*********** Relationships End ***************/
+
+    public static function deleteByIndicatorId($indi_id){
+    	self::where('indicator_id', $indi_id)->delete();
+    }
+
+    public static function insertNewData($indi_id, $ti_data){
+    	self::create([
+			'indicator_id' => $indi_id,
+			'description'  => $ti_data['description'],
+			'point'		   => $ti_data['point'],
+		]);
+    }
 }
