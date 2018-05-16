@@ -21,7 +21,7 @@
 	</tbody>
 </table>
 <br>
-<div style="text-decoration: underline;"> <h3>Poll Suggetes Indicators</h3></div>
+<div style="text-decoration: underline;"> <h3>Poll Suggeted Indicators</h3></div>
 <table style="border: 1px solid black;border-collapse: collapse;padding: 5px;">
 	<thead style="border: 1px solid black;border-collapse: collapse;padding: 5px;">
 		<th style="border: 1px solid black;border-collapse: collapse; padding: 5px;">Indicator</th>

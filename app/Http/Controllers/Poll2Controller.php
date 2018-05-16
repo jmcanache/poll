@@ -51,7 +51,7 @@ class Poll2Controller extends Controller
         try{
 	        Mail::send('emails.email_poll2', ['answers' => json_decode($request['answers']), 'explains' => json_decode($request['explains']), 'indicators' => json_decode($request['indicators']), 'db_indicators' => $db_indicators], function ($m) {
 	            $m->from('bam-noreply@bestarchitecturemasters.com', 'BAM');
-	            $m->to('info@bestarchitecturemasters.com', 'BAM')->subject('BAM FORM #2');
+	            $m->to('canache39@gmail.com', 'BAM')->subject('BAM FORM #2');
 	        });
 	    }catch(\Exception $e){
 		    return response()->json(array('send' => 0));
