@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class Table_indicator extends Model
 {
-	protected $fillable = ['indicator_id', 'description', 'point'];
+	protected $fillable = ['indicator_id', 'description', 'point', 'position'];
 
 	/*********** Relationships Start **************/
 	
@@ -26,6 +27,7 @@ class Table_indicator extends Model
 			'indicator_id' => $indi_id,
 			'description'  => $ti_data['description'],
 			'point'		   => $ti_data['point'],
+            'position'     => $ti_data['position'],
 		]);
     }
 }

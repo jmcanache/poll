@@ -36,7 +36,7 @@ class Poll2Controller extends Controller
 
     	if($indicator->state_poll == 1){
     		$common_data = $poll->common;
-    		$table_data = $indicator->table_indicators;
+    		$table_data = $indicator->table_indicators()->orderBy('position', 'asc')->get();
     	}
 
     	if($next_position == 16){

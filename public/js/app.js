@@ -73,7 +73,7 @@
             		   	ip = data['indicator']['indi_points'];
             		   	ap = data['indicator']['add_points'];
 					    table_info = table_info + `<tr class="row_table">
-										                <td class="text-center table_description">${row['description']}</td>
+										                <td class="text-center table_description" position="${row['position']}">${row['description']}</td>
 										                <td class="text-center">
 										                    <b class="table_point">${row['point']}</b>
 										                </td>
@@ -334,9 +334,11 @@
  		$('.row_table').each(function(index, elem){
  			let point = $(this).find('.table_point').html();
  			let description = $(this).find('.table_description').html();
+ 			let position = $(this).find('.table_description').attr('position');
  			table_indicators[index] = {
  				'point': point, 
- 				'description': description
+ 				'description': description,
+ 				'position': position
  			}; 	
  		});
 
