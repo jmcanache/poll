@@ -41,7 +41,7 @@
     <br>
 
     <button type="button" class="btn btn-block help" data-toggle="popover" data-content="{{ $help_text }} ">
-        <b>HELP!</b>
+        <b>HELP</b>
     </button>
     @if($edit_active) 
         <div class="help_text hidden">

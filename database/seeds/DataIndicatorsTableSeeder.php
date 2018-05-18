@@ -154,7 +154,7 @@ class DataIndicatorsTableSeeder extends Seeder
 
 					'Thank you very much for your collaboration for the BAM Ranking.</br></br>
 					We will check the information you have provided and the results of the study will be
-					updated at: <h3><strong>www.bestarchitecturemasters.com</strong></h3>'
+					updated at: <a href="http://www.bestarchitecturemasters.com" class="last_link"><h3><strong>www.bestarchitecturemasters.com</strong></h3></a>'
         ];
 
         foreach ($texts as $index => $text) {

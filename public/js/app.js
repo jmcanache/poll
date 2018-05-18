@@ -54,7 +54,7 @@
 
             	//Set Button name depending on Indicator position
             	if(data['indicator']['position'] == 2) button_text.html('START');
-            	else if(data['indicator']['position'] == 18) button_text.html('FINISH')
+            	else if(data['indicator']['position'] == 17) button_text.html('SUBMIT')
             	else button_text.html('NEXT');           
 
             	//Hide previous button if in first pahe
@@ -205,13 +205,17 @@
             								<div class="col-sm-5"><input type="text" placeholder="Indicator..." id="indi_add"></div>
             								<div class="col-sm-7"><input type="text" placeholder="Why?" id="why_add"></div>
             								<div class="col-xs-12 text-right"><a href="#" id="add_indi"><h6><strong>Add indicator +</strong></h6></a></div>
-            							</div>`;
+            							</div></br></br>`;
             		$('#indicator_body').html(indicator_body);
             	}else{
             		$('#indicator_body').empty();
             	}
             	//scroll to top
             	window.scrollTo(0, 0);
+
+            	if(data['indicator']['position'] == 18){
+            		$('.next, .prev, .help').addClass('hidden');
+            	}
             }
         });
  	}
@@ -221,7 +225,7 @@
  		let current_poll = $('.current_poll').attr('id');
 
  		
- 		if(next_position == 19) {
+ 		if(next_position == 18) {
  			$('.next, .prev').prop('disabled', true);
  			mail_data = {'answers': JSON.stringify(answers), 'explains': JSON.stringify(explains), 'indicators': JSON.stringify(new_indicators)};
  			$.ajax({
@@ -234,19 +238,13 @@
 				data: mail_data,
 	            success: (data) => {
 	            	if(data['send'] == 1 ){
-	            		answers = {};
-	            		explains = {};
-	            		new_indicators = {};
-	            		$('#previous, .next, #indicator_text, #indicator_title, .help').addClass('hidden');
-	            		$('#poll_description').removeClass('hidden');
-	            		$('#indicator_body').html('<br><br><div class="text-center"><h1><strong>Thanks for your help!</strong></h1></div>');
+	            		console.log(data);
 	            	}else{
 	            		alert("Something wrong happened! Please try again.")
 	            		$('.next, .prev').prop('disabled', false);
 	            	}
 	            }
         	})
- 			return;
  		}
  		//hide popover of help
  		$('[data-toggle="popover"]').popover('hide');
