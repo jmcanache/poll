@@ -22,9 +22,9 @@
 
     <br>
 
-    <p id="indicator_text">
+    <div id="indicator_text">
         {!! $indicator_text !!}
-    </p>
+    </div>
 
     <br>
 
