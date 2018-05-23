@@ -8,7 +8,7 @@
 	$('[data-toggle="popover"]').popover();
 
  	function ajaxCall(self, next_position, current_poll){
- 		const current_position = next_position - 1;
+ 		const current_position = self == 'next' ? (next_position - 1) : (next_position + 1);
  		$.ajax({
             type: "GET",
             url: '/getNextPageInfo/'+ next_position + '/' + current_poll,
@@ -29,6 +29,13 @@
 				//Save values of anwers locally
           		if(self == 'next' && current_position > 2 && current_position <= 15){
           			answers[current_position] = $('input[name=study]:checked', '.qualify').val();
+          			explains[current_position] = answers[current_position] == 1 ? "" : $('.why').val();
+          		}
+          		
+          		if(self == 'prev' && current_position > 2 && current_position <= 15){
+          			if($('input[name=study]:checked', '.qualify').val()){
+          				answers[current_position] = $('input[name=study]:checked', '.qualify').val();
+          			}
           			explains[current_position] = answers[current_position] == 1 ? "" : $('.why').val();
           		}
           		
@@ -286,7 +293,7 @@
  		let next_position = $('.next').attr('id') - 2;
  		let current_poll = $('.current_poll').attr('id');
  		$('[data-toggle="popover"]').popover('hide');
- 		ajaxCall('.prev', next_position, current_poll);
+ 		ajaxCall('prev', next_position, current_poll);
  	});
 
  	$('#btn_edit').click(function(){
