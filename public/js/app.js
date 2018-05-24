@@ -18,6 +18,9 @@
           		let checked_yes = ""; 
           		let checked_maybe = ""; 
           		let checked_no = "";
+          		let classGray = "light-gray";
+          		let disabled = "disabled";
+          		let placeholder = "";
           		const indicator_title = $('#indicator_title');
             	const indicator_text = $('#indicator_text');
             	const button_text = $('#button-text');
@@ -42,8 +45,18 @@
           		//Search for previous answer for show
           		if(next_position in answers){
           			if(answers[next_position] == 1) checked_yes = "checked";
-          			else if(answers[next_position] == 2) checked_maybe = "checked";
-          			else checked_no = "checked";
+          			else if(answers[next_position] == 2){
+          				checked_maybe = "checked";
+          				classGray = "",
+          				disabled = "";
+          				placeholder="Type here...";
+          			} 
+          			else{
+          				checked_no = "checked";
+          				classGray = "",
+          				disabled = "";
+          				placeholder="Type here...";
+          			} 
           		}
           		if(next_position in explains){
           			why_val = explains[next_position];
@@ -150,7 +163,7 @@
 									    <br>
 
 									    <h4 id="title_textbox"> ${ data['common']['title_textbox'] } </h4>
-									    <textarea name="why" class="why light-gray" cols="30" rows="10" disabled="disabled">${why_val}</textarea>
+									    <textarea name="why" class="why ${classGray}" cols="30" rows="10" ${disabled} placeholder="${placeholder}">${why_val}</textarea>
 
 									    <br>
 									    <br>
