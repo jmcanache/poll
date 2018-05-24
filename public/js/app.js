@@ -392,9 +392,9 @@
 
     $('body').on('click', '.radios', function(){
     	if($(this).val() == 1){
-    		$('.why').prop('disabled', true).attr('placeholder', '');
+    		$('.why').prop('disabled', true).attr('placeholder', '').addClass('light-gray');
     	}else{
-    		$('.why').prop('disabled', false).attr('placeholder', 'Type here...');
+    		$('.why').prop('disabled', false).attr('placeholder', 'Type here...').removeClass('light-gray');
     	}
     });
  })
