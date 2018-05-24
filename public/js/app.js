@@ -389,6 +389,14 @@
  	$('#btn_cancel').click(function(){
         location.reload();
     });
+
+    $('body').on('click', '.radios', function(){
+    	if($(this).val() == 1){
+    		$('.why').prop('disabled', true).attr('placeholder', '');
+    	}else{
+    		$('.why').prop('disabled', false).attr('placeholder', 'Type here...');
+    	}
+    });
  })
 
  function toNumberString(num) { 
